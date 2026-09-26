@@ -66,43 +66,30 @@ plt.legend()
 plt.show()
 
 ##Grafico de observación 9 -----  P1904: ¿Que tan triste se sintio el dia de ayer?
-plt.figure(figsize=(8,6))
-for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
+df_combinado = pd.concat(
+    [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
+    ignore_index=True
+)
 
-plt.title("Mapa de dispersión: ¿Que tan triste se sintio el dia de ayer?")    
-plt.xlabel("Número de observación")
-# Etiqueta del eje Y, indicando el significado de la escala 0-10
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1904',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
 plt.ylabel("P1904 (0 = Para nada triste, 10 = Todo el tiempo triste)")
-# Nota aclaratoria adicional debajo del gráfico sobre la escala
-plt.figtext(0.5, -0.03, "Escala: 0 = Para nada triste | 10 = Todo el tiempo triste",ha="center", fontsize=9, style="italic")
-plt.legend()
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de tristeza por grupo étnico")
 plt.show()
 
 ## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
-plt.figure(figsize=(8,6))
-for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1905"], color=color, label=var)
-
-plt.title("Mapa de dispersión:¿Qué tanto considera que las cosas que hace en su vida valen la pena?")    
-plt.xlabel("Número de observación")
-# Etiqueta del eje Y, indicando el significado de la escala 0-10
-plt.ylabel("P1904 (0 = No valen la pena, 10 =  Valen totalmente la pena")
-# Nota aclaratoria adicional debajo del gráfico sobre la escala
-plt.figtext(0.5, -0.03, "Escala: 0 = No valen la pena | 10 =  Valen totalmente la pena",ha="center", fontsize=9, style="italic")
-plt.legend()
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1905',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.ylabel("P1905 (0 = No valen la pena, 10 = Valen totalmente la pena)")
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de '¿qué tanto vale la pena su vida?' por grupo étnico")
 plt.show()
 
 ## Grafico de observación 11 ---- P1927: ¿En cuál escalón diría usted que se encuentra parado/a en este momento?
-plt.figure(figsize=(8,6))
-for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1927"], color=color, label=var)
-
-plt.title("Mapa de dispersión:¿En cuál escalón diría usted que se encuentra parado/a en este momento?")    
-plt.xlabel("Número de observación")
-# Etiqueta del eje Y, indicando el significado de la escala 0-10
-plt.ylabel("P1904 (0 = Peor vida, 10 =   Mejor vida)")
-# Nota aclaratoria adicional debajo del gráfico sobre la escala
-plt.figtext(0.5, -0.03, "Escala: 0 = Peor vida | 10 =  Mejor vida",ha="center", fontsize=9, style="italic")
-plt.legend()
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1927',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.ylabel("P1927 (0 = Peor vida, 10 = Mejor vida)")
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de '¿en qué escalón se encuentra?' por grupo étnico")
 plt.show()

@@ -101,7 +101,7 @@ for var, (df,color) in grupos.items():
 plt.title("Mapa de dispersión:¿En cuál escalón diría usted que se encuentra parado/a en este momento?")    
 plt.xlabel("Número de observación")
 # Etiqueta del eje Y, indicando el significado de la escala 0-10
-plt.ylabel("P1904 (0 = Peor vida, 10 =   Mejor vida")
+plt.ylabel("P1904 (0 = Peor vida, 10 =   Mejor vida)")
 # Nota aclaratoria adicional debajo del gráfico sobre la escala
 plt.figtext(0.5, -0.03, "Escala: 0 = Peor vida | 10 =  Mejor vida",ha="center", fontsize=9, style="italic")
 plt.legend()

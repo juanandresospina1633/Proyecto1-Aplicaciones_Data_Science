@@ -35,6 +35,20 @@ n_afro_bogota = len(df_bogota_negros)
 print(f"Personas indígenas en la muestra de Bogotá: {n_indigenas_bogota}")
 print(f"Personas afro en la muestra de Bogotá: {n_afro_bogota}")
 
+## Reconocer que cantidad de población representan los individuos encuestados
+poblacion_indigena = df_bogota_indigenas["FEX_C"].sum()
+poblacion_afro = df_bogota_negros["FEX_C"].sum()
+
+print(f"Población indígena estimada en Bogotá segun el Factor de expansión: {poblacion_indigena:,.0f}")
+print(f"Población afro estimada en Bogotá según el Factor de expansión: {poblacion_afro:,.0f}")
+
+## reconocer el factor de expansión de cada persona
+print("Factor de expansión - Indígenas")
+print(df_bogota_indigenas[["FEX_C"]].to_string(index=False))
+
+print("\nFactor de expansión - Afro")
+print(df_bogota_negros[["FEX_C"]].to_string(index=False))
+
 sns.set(style="whitegrid")
 
 # Diccionario de grupos y colores
@@ -42,12 +56,6 @@ grupos = {
     "Indígena": (df_bogota_indigenas, "red"),
     "Afro": (df_bogota_negros, "blue")
 }
-## Reconocer que cantidad de población representan los individuos encuestados
-poblacion_indigena = df_bogota_indigenas["FEX_C"].sum()
-poblacion_afro = df_bogota_negros["FEX_C"].sum()
-
-print(f"Población indígena estimada en Bogotá segun el Factor de expansión: {poblacion_indigena:,.0f}")
-print(f"Población afro estimada en Bogotá según el Factor de expansión: {poblacion_afro:,.0f}")
 
 ###GRAFICOS DE DISPERSION 
 # --- Gráfico 1: P1895, satisfaccion con la vida ---
@@ -81,30 +89,58 @@ plt.legend()
 plt.show()
 
 ##Grafico de observación 9 -----  P1904: ¿Que tan triste se sintio el dia de ayer?
-df_combinado = pd.concat(
-    [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
-    ignore_index=True
-)
+plt.figure(figsize=(8,6))
 
-sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1904',
-            palette={'Indígena': 'red', 'Afro': 'blue'})
+for nombre_grupo, (df, color) in grupos.items():
+    plt.scatter(
+        [nombre_grupo] * len(df),      # eje X: nombre del grupo (categórico)
+        df["P1904"],                   # eje Y: valor de tristeza
+        s=df["FEX_C"] * 3,             # tamaño del punto proporcional al peso poblacional
+        color=color,
+        alpha=0.6,
+        edgecolor="black",
+        label=nombre_grupo
+    )
+
 plt.ylabel("P1904 (0 = Para nada triste, 10 = Todo el tiempo triste)")
 plt.xlabel("Grupo étnico")
-plt.title("Distribución de tristeza por grupo étnico")
+plt.title("Tristeza por grupo étnico (tamaño del punto = factor de expansión FEX_C)")
 plt.show()
 
 ## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
-sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1905',
-            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.figure(figsize=(8,6))
+
+for nombre_grupo, (df, color) in grupos.items():
+    plt.scatter(
+        [nombre_grupo] * len(df),
+        df["P1905"],
+        s=df["FEX_C"] * 3,
+        color=color,
+        alpha=0.6,
+        edgecolor="black",
+        label=nombre_grupo
+    )
+
 plt.ylabel("P1905 (0 = No valen la pena, 10 = Valen totalmente la pena)")
 plt.xlabel("Grupo étnico")
-plt.title("Distribución de '¿qué tanto vale la pena su vida?' por grupo étnico")
+plt.title("¿Vale la pena su vida? por grupo étnico (tamaño del punto = FEX_C)")
 plt.show()
 
 ## Grafico de observación 11 ---- P1927: ¿En cuál escalón diría usted que se encuentra parado/a en este momento?
-sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1927',
-            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.figure(figsize=(8,6))
+
+for nombre_grupo, (df, color) in grupos.items():
+    plt.scatter(
+        [nombre_grupo] * len(df),
+        df["P1927"],
+        s=df["FEX_C"] * 3,
+        color=color,
+        alpha=0.6,
+        edgecolor="black",
+        label=nombre_grupo
+    )
+
 plt.ylabel("P1927 (0 = Peor vida, 10 = Mejor vida)")
 plt.xlabel("Grupo étnico")
-plt.title("Distribución de '¿en qué escalón se encuentra?' por grupo étnico")
+plt.title("Escalón de vida por grupo étnico (tamaño del punto = FEX_C)")
 plt.show()

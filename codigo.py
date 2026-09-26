@@ -82,7 +82,7 @@ plt.show()
 ## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
 plt.figure(figsize=(8,6))
 for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
+    sns.scatterplot(x=range(len(df)), y=df["P1905"], color=color, label=var)
 
 plt.title("Mapa de dispersión:¿Qué tanto considera que las cosas que hace en su vida valen la pena?")    
 plt.xlabel("Número de observación")
@@ -96,7 +96,7 @@ plt.show()
 ## Grafico de observación 11 ---- P1927: ¿En cuál escalón diría usted que se encuentra parado/a en este momento?
 plt.figure(figsize=(8,6))
 for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
+    sns.scatterplot(x=range(len(df)), y=df["P1927"], color=color, label=var)
 
 plt.title("Mapa de dispersión:¿En cuál escalón diría usted que se encuentra parado/a en este momento?")    
 plt.xlabel("Número de observación")

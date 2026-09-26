@@ -31,8 +31,8 @@ sns.set(style="whitegrid")
 
 # Diccionario de grupos y colores
 grupos = {
-    "Indígenas": (df_bogota_indigenas, "red"),
-    "Negros": (df_bogota_negros, "blue")
+    "Indígena": (df_bogota_indigenas, "red"),
+    "Afro": (df_bogota_negros, "blue")
 }
 ###GRAFICOS DE DISPERSION 
 # --- Gráfico 1: P1895, satisfaccion con la vida ---
@@ -65,4 +65,44 @@ plt.ylabel("P1899")
 plt.legend()
 plt.show()
 
+##Grafico de observación 9 -----  P1904: ¿Que tan triste se sintio el dia de ayer?
+plt.figure(figsize=(8,6))
+for var, (df,color) in grupos.items():
+    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
 
+plt.title("Mapa de dispersión:¿Qué tan preocupado/a se sintió ... el día de ayer?")    
+plt.xlabel("Número de observación")
+# Etiqueta del eje Y, indicando el significado de la escala 0-10
+plt.ylabel("P1904 (0 = Para nada triste, 10 = Todo el tiempo triste)")
+# Nota aclaratoria adicional debajo del gráfico sobre la escala
+plt.figtext(0.5, -0.03, "Escala: 0 = Para nada triste | 10 = Todo el tiempo triste",ha="center", fontsize=9, style="italic")
+plt.legend()
+plt.show()
+
+## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
+plt.figure(figsize=(8,6))
+for var, (df,color) in grupos.items():
+    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
+
+plt.title("Mapa de dispersión:¿Qué tanto considera...que las cosas que hace en su vida valen la pena?")    
+plt.xlabel("Número de observación")
+# Etiqueta del eje Y, indicando el significado de la escala 0-10
+plt.ylabel("P1904 (0 = No valen la pena, 10 =  Valen totalmente la pena")
+# Nota aclaratoria adicional debajo del gráfico sobre la escala
+plt.figtext(0.5, -0.03, "Escala: 0 = No valen la pena | 10 =  Valen totalmente la pena",ha="center", fontsize=9, style="italic")
+plt.legend()
+plt.show()
+
+## Grafico de observación 11 ---- P1927: ¿En cuál escalón diría usted que se encuentra parado/a en este momento?
+plt.figure(figsize=(8,6))
+for var, (df,color) in grupos.items():
+    sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
+
+plt.title("Mapa de dispersión:¿En cuál escalón diría usted que se encuentra parado/a en este momento?")    
+plt.xlabel("Número de observación")
+# Etiqueta del eje Y, indicando el significado de la escala 0-10
+plt.ylabel("P1904 (0 = Peor vida, 10 =   Mejor vida")
+# Nota aclaratoria adicional debajo del gráfico sobre la escala
+plt.figtext(0.5, -0.03, "Escala: 0 = Peor vida | 10 =  Mejor vida",ha="center", fontsize=9, style="italic")
+plt.legend()
+plt.show()

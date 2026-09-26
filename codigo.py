@@ -70,7 +70,7 @@ plt.figure(figsize=(8,6))
 for var, (df,color) in grupos.items():
     sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
 
-plt.title("Mapa de dispersión:¿Qué tan preocupado/a se sintió ... el día de ayer?")    
+plt.title("Mapa de dispersión: ¿Que tan triste se sintio el dia de ayer?")    
 plt.xlabel("Número de observación")
 # Etiqueta del eje Y, indicando el significado de la escala 0-10
 plt.ylabel("P1904 (0 = Para nada triste, 10 = Todo el tiempo triste)")
@@ -84,7 +84,7 @@ plt.figure(figsize=(8,6))
 for var, (df,color) in grupos.items():
     sns.scatterplot(x=range(len(df)), y=df["P1904"], color=color, label=var)
 
-plt.title("Mapa de dispersión:¿Qué tanto considera...que las cosas que hace en su vida valen la pena?")    
+plt.title("Mapa de dispersión:¿Qué tanto considera que las cosas que hace en su vida valen la pena?")    
 plt.xlabel("Número de observación")
 # Etiqueta del eje Y, indicando el significado de la escala 0-10
 plt.ylabel("P1904 (0 = No valen la pena, 10 =  Valen totalmente la pena")

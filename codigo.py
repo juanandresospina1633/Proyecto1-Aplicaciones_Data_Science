@@ -20,12 +20,20 @@ print("Total registros originales:", len(df))
 print("Registros mayores de 18:", len(df_mayores18))
 print("Registros mayores de 18 que vivieron en Bogotá:", len(df_bogota))
 
+# Si el separador decimal es coma, reemplázala por punto antes de convertir
+df_bogota["FEX_C"] = df_bogota["FEX_C"].astype(str).str.replace(",", ".").astype(float)
+
 print("bienestar por etnia")
 
-df_bogota_indigenas = df_bogota.loc[df_bogota["P6080"] == 1, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
-df_bogota_negros = df_bogota.loc[df_bogota["P6080"] == 5, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
-df_bogota_sin_etnia = df_bogota.loc[df_bogota["P6080"] == 6, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
+df_bogota_indigenas = df_bogota.loc[df_bogota["P6080"] == 1, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927","FEX_C"]]
+df_bogota_negros = df_bogota.loc[df_bogota["P6080"] == 5, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927","FEX_C"]]
+df_bogota_sin_etnia = df_bogota.loc[df_bogota["P6080"] == 6, ["P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927","FEX_C"]]
 
+n_indigenas_bogota = len(df_bogota_indigenas)
+n_afro_bogota = len(df_bogota_negros)
+
+print(f"Personas indígenas en la muestra de Bogotá: {n_indigenas_bogota}")
+print(f"Personas afro en la muestra de Bogotá: {n_afro_bogota}")
 
 sns.set(style="whitegrid")
 
@@ -34,6 +42,13 @@ grupos = {
     "Indígena": (df_bogota_indigenas, "red"),
     "Afro": (df_bogota_negros, "blue")
 }
+## Reconocer que cantidad de población representan los individuos encuestados
+poblacion_indigena = df_bogota_indigenas["FEX_C"].sum()
+poblacion_afro = df_bogota_negros["FEX_C"].sum()
+
+print(f"Población indígena estimada en Bogotá segun el Factor de expansión: {poblacion_indigena:,.0f}")
+print(f"Población afro estimada en Bogotá según el Factor de expansión: {poblacion_afro:,.0f}")
+
 ###GRAFICOS DE DISPERSION 
 # --- Gráfico 1: P1895, satisfaccion con la vida ---
 plt.figure(figsize=(8,6))

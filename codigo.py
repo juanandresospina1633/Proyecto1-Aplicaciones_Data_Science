@@ -88,6 +88,11 @@ plt.ylabel("P1899")
 plt.legend()
 plt.show()
 
+
+df_combinado = pd.concat(
+    [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
+    ignore_index=True
+)
 ##Grafico de observación 9 -----  P1904: ¿Que tan triste se sintio el dia de ayer?
 sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1904',
             palette={'Indígena': 'red', 'Afro': 'blue'})
@@ -115,10 +120,7 @@ plt.title("Tristeza por grupo étnico (tamaño del punto = factor de expansión 
 plt.show()
 
 ## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
-df_combinado = pd.concat(
-    [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
-    ignore_index=True
-)
+
 sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1905',
             palette={'Indígena': 'red', 'Afro': 'blue'})
 plt.ylabel("P1905 (0 = No valen la pena, 10 = Valen totalmente la pena)")

@@ -89,6 +89,13 @@ plt.legend()
 plt.show()
 
 ##Grafico de observación 9 -----  P1904: ¿Que tan triste se sintio el dia de ayer?
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1904',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.ylabel("P1904 (0 = Para nada triste, 10 = Todo el tiempo triste)")
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de tristeza por grupo étnico")
+plt.show()
+
 plt.figure(figsize=(8,6))
 
 for nombre_grupo, (df, color) in grupos.items():
@@ -108,6 +115,17 @@ plt.title("Tristeza por grupo étnico (tamaño del punto = factor de expansión 
 plt.show()
 
 ## Grafico de observación 10 ----- P1905: ¿Qué tanto considera...que las cosas que hace en su vida valen la pena?
+df_combinado = pd.concat(
+    [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
+    ignore_index=True
+)
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1905',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.ylabel("P1905 (0 = No valen la pena, 10 = Valen totalmente la pena)")
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de '¿qué tanto vale la pena su vida?' por grupo étnico")
+plt.show()
+
 plt.figure(figsize=(8,6))
 
 for nombre_grupo, (df, color) in grupos.items():
@@ -127,6 +145,14 @@ plt.title("¿Vale la pena su vida? por grupo étnico (tamaño del punto = FEX_C)
 plt.show()
 
 ## Grafico de observación 11 ---- P1927: ¿En cuál escalón diría usted que se encuentra parado/a en este momento?
+
+sns.boxplot(data=df_combinado, x='grupo_etnico', y='P1927',
+            palette={'Indígena': 'red', 'Afro': 'blue'})
+plt.ylabel("P1927 (0 = Peor vida, 10 = Mejor vida)")
+plt.xlabel("Grupo étnico")
+plt.title("Distribución de '¿en qué escalón se encuentra?' por grupo étnico")
+plt.show()
+
 plt.figure(figsize=(8,6))
 
 for nombre_grupo, (df, color) in grupos.items():

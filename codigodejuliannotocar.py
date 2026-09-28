@@ -5,42 +5,36 @@ import numpy as np
 
 
 df = pd.read_csv("Características y composición del hogar.csv", sep=";")
-
 df_mayores18 = df[df["P6040"] >= 18]
-
 df_bogota = df_mayores18[df_mayores18["P753S1"] == 11].copy()
 
+# LIMPIEZA
+# Se cambian los valores de la variable factor de expansión por numéricos (float)
+df_bogota["FEX_C"] = pd.to_numeric(
+    df_bogota["FEX_C"].str.replace(",", ".", regex=False),
+    errors="coerce"
+)
+# Se limpia la variable P1896 de valores inválidos
+df_bogota["P1896"] = df_bogota["P1896"].replace(99,np.nan)
 
 
-# df_bogota["FEX_C"] = df_bogota["FEX_C"].astype(str).str.replace(",", ".").astype(float)
-# df_bogota['FEX_C'].head(20)
-# media_ponderada = np.average(df_bogota['P1896'], weights=df_bogota['FEX_C'])
-
-# media_ponderada
-
-# Diccionario de categorías étnicas para la creación del gráfico
+# Diccionario de categorías étnicas para los gráficos
 etnias = {
     1: "Indígena",
     5: "Negro/Afro",
     6: "Ninguno"
 }
-# Reemplazar valores de "99" en la variable de satisfacción de ingresos por NaN.
-df_bogota["P1896"] = df_bogota["P1896"].replace(99,np.nan)
-# Crear una nueva variable con los grupos étnicos con la función .map
-df_bogota["grupo_etnico"] = df["P6080"].map(etnias)
+df_bogota["grupo_etnico"] = df_bogota["P6080"].map(etnias)
 
 
-# GRÁFICO 1: SATISFACCION PROMEDIO CON EL INGRESO SEGÚN GRUPO ÉTNICO
+# SATISFACCIÓN CON INGRESO
 
-# Se calcula el promedio de la variable de satisfaccion de ingreso por el grupo étnico
+df_ingreso = df_bogota.dropna(subset=["P1896", "FEX_C", "grupo_etnico"])
+
 prom_ingreso = (
-    df_bogota.groupby("grupo_etnico")["P1896"]
-    .mean()
-    # .sort_values(ascending=False)
+    df_ingreso.groupby("grupo_etnico").apply(lambda x: (x["P1896"] * x["FEX_C"]).sum() / x["FEX_C"].sum())
 )
-#(pruebas)
-# print(df_bogota['P1896'].value_counts())
-# print(df_bogota['P1898'].value_counts())
+
 
 plt.figure(figsize=(10,6))
 sns.barplot(
@@ -49,25 +43,21 @@ sns.barplot(
     palette="Blues_d"
 )
 
-plt.title("Satisfacción promedio con el ingreso según grupo étnico")
+plt.title("Satisfacción promedio con el ingreso según grupo étnico (ponderada)")
 plt.xlabel("Grupo étnico")
 plt.ylabel("Promedio satisfacción (0-10)")
 plt.xticks(rotation=45)
 plt.ylim(0,10)
-# Se añaden los valores encima de las barras como texto
 for i, v in enumerate(prom_ingreso.values):
     plt.text(i, v+0.1, f"{v:.2f}", ha='center')
 plt.tight_layout()
 plt.show()
 
 
-# GRÁFICO 2: SATISFACCION SEGURIDAD
-
-# Se calculan los promedios por grupo étnico.
+# SATISFACCION SEGURIDAD
+df_seguridad = df_bogota.dropna(subset=["P1898", "FEX_C", "grupo_etnico"])
 prom_seguridad = (
-    df_bogota.groupby("grupo_etnico")["P1898"]
-    .mean()
-    .sort_values(ascending=False)
+    df_seguridad.groupby("grupo_etnico").apply(lambda x: (x["P1898"] * x["FEX_C"]).sum() / x["FEX_C"].sum())
 )
 
 plt.figure(figsize=(10,6))
@@ -77,12 +67,11 @@ sns.barplot(
     palette="Greens_d"
 )
 
-plt.title("Satisfacción promedio con la seguridad según grupo étnico")
+plt.title("Satisfacción promedio con la seguridad según grupo étnico (ponderada)")
 plt.xlabel("Grupo étnico")
 plt.ylabel("Promedio satisfacción (0-10)")
 plt.xticks(rotation=45)
-plt.ylim(0,10)
-# Se añaden los valores encima de las barras como texto
+plt.ylim(0,11)
 for i, v in enumerate(prom_seguridad.values):
     plt.text(i, v+0.1, f"{v:.2f}", ha='center')
 plt.tight_layout()

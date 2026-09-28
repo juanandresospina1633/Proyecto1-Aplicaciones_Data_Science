@@ -160,14 +160,199 @@ plt.title("Distribución de '¿en qué escalón se encuentra?' por grupo étnico
 plt.show()
 
 plt.figure(figsize=(8,6))
-for var, (df,color) in grupos.items():
-    sns.scatterplot(x=range(len(df)), y=df["P1927"], color=color, label=var)
 
-plt.title("Mapa de dispersión:¿En cuál escalón diría usted que se encuentra parado/a en este momento?")    
-plt.xlabel("Número de observación")
-# Etiqueta del eje Y, indicando el significado de la escala 0-10
-plt.ylabel("P1904 (0 = Peor vida, 10 =   Mejor vida)")
-# Nota aclaratoria adicional debajo del gráfico sobre la escala
-plt.figtext(0.5, -0.03, "Escala: 0 = Peor vida | 10 =  Mejor vida",ha="center", fontsize=9, style="italic")
-plt.legend()
+for nombre_grupo, (df, color) in grupos.items():
+    plt.scatter(
+        [nombre_grupo] * len(df),
+        df["P1927"],
+        s=df["FEX_C"] * 3,
+        color=color,
+        alpha=0.6,
+        edgecolor="black",
+        label=nombre_grupo
+    )
+
+plt.ylabel("P1927 (0 = Peor vida, 10 = Mejor vida)")
+plt.xlabel("Grupo étnico")
+plt.title("Escalón de vida por grupo étnico (tamaño del punto = FEX_C)")
+plt.show()
+
+# Función auxiliar sumar el factor de expansión
+def preparar_datos(df_subset, variable_analizada):
+  df_subset = df_subset.copy()
+
+  resultado = df_subset.groupby(variable_analizada)['FEX_C'].sum()
+  niveles_completos = range(11)
+  resultado = resultado.reindex(niveles_completos, fill_value=0)
+  return resultado
+
+## Grafico de observación 12 ---- P3175: En general, ¿qué tan satisfecho/a se siente _____ con su tiempo libre?
+
+# Se separan las columnas que se van a utilizar para cada etnia
+indigenas_tiempolibre = df_bogota_indigenas[['P3175', 'FEX_C']]
+negros_tiempolibre = df_bogota_negros[['P3175', 'FEX_C']]
+sin_etnia_tiempolibre = df_bogota_sin_etnia[['P3175', 'FEX_C']]
+
+# Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
+datos_indigenas_tiempolibre = preparar_datos(indigenas_tiempolibre, 'P3175')
+datos_negros_tiempolibre = preparar_datos(negros_tiempolibre, 'P3175')
+datos_sin_etnia_tiempolibre = preparar_datos(sin_etnia_tiempolibre, 'P3175')
+
+# Se crea una figura con 3 gráficos de barras con EJES Y INDEPENDIENTES (sharey=False)
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 5), sharey=False)
+
+# Se asigna el título
+fig.suptitle(
+    'Frecuencia de Satisfación con el tiempo libre (P3175) por Grupo Étnico\n(Población expandida'
+    ' con FEX_C - Escalas independientes)',
+    fontsize=15,
+    weight='bold',
+    y=1.02,
+)
+
+# Datos, títulos y colores para cada gráfico
+grupos = [
+    (datos_indigenas_tiempolibre, '1. Indígena', '#2b5c8f'),
+    (datos_negros_tiempolibre, '5. Negro/a, mulato/a, afrodescendiente, afrocolombiano/a', '#d95f02'),
+    (datos_sin_etnia_tiempolibre, '6. Ningún grupo étnico', '#7570b3'),
+]
+
+for i, (serie_datos, titulo, color) in enumerate(grupos):
+  ax = axes[i]
+
+  # Graficar barras
+  serie_datos.plot(
+      kind='bar', ax=ax, color=color, width=0.75, edgecolor='black'
+  )
+
+  # Personalización de cada gráfico
+  ax.set_title(titulo, fontsize=12, weight='bold')
+  ax.set_xlabel(
+      'Satisfación con el tiempo libre (P1901)\n(0 = Totalmente insatisfecho/a, 10 = Totalmente satisfecho/a)',
+      fontsize=10,
+  )
+
+  # Como cada gráfico tiene su propia escala, se muestra el eje Y en cada uno
+  ax.set_ylabel(
+      'Población Representada (Frecuencia ponderada FEX_C)', fontsize=10
+  )
+
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+  ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+plt.tight_layout()
+plt.show()
+
+## Grafico de observación 13 ---- P1901: ¿Qué tan feliz se sintió ... el día de ayer?
+
+# Se separan las columnas que se van a utilizar para cada etnia
+indigenas_feliz = df_bogota_indigenas[['P1901', 'FEX_C']]
+negros_feliz = df_bogota_negros[['P1901', 'FEX_C']]
+sin_etnia_feliz = df_bogota_sin_etnia[['P1901', 'FEX_C']]
+
+# Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
+datos_indigenas_feliz = preparar_datos(indigenas_feliz, 'P1901')
+datos_negros_feliz = preparar_datos(negros_feliz, 'P1901')
+datos_sin_etnia_feliz = preparar_datos(sin_etnia_feliz, 'P1901')
+
+# Se crea una figura con 3 gráficos de barras con EJES Y INDEPENDIENTES (sharey=False)
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 5), sharey=False)
+
+# Se asigna el título
+fig.suptitle(
+    'Frecuencia de Felicidad (P1901) por Grupo Étnico\n(Población expandida'
+    ' con FEX_C - Escalas independientes)',
+    fontsize=15,
+    weight='bold',
+    y=1.02,
+)
+
+# Datos, títulos y colores para cada gráfico
+grupos = [
+    (datos_indigenas_feliz, '1. Indígena', '#2b5c8f'),
+    (datos_negros_feliz, '5. Negro/a, mulato/a, afrodescendiente, afrocolombiano/a', '#d95f02'),
+    (datos_sin_etnia_feliz, '6. Ningún grupo étnico', '#7570b3'),
+]
+
+for i, (serie_datos, titulo, color) in enumerate(grupos):
+  ax = axes[i]
+
+  # Graficar barras
+  serie_datos.plot(
+      kind='bar', ax=ax, color=color, width=0.75, edgecolor='black'
+  )
+
+  # Personalización de cada gráfico
+  ax.set_title(titulo, fontsize=12, weight='bold')
+  ax.set_xlabel(
+      'Nivel de Felicidad (P1901)\n(0 = Para nada, 10 = Todo el tiempo)',
+      fontsize=10,
+  )
+
+  # Como cada gráfico tiene su propia escala, se muestra el eje Y en cada uno
+  ax.set_ylabel(
+      'Población Representada (Frecuencia ponderada FEX_C)', fontsize=10
+  )
+
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+  ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+plt.tight_layout()
+plt.show()
+
+## Grafico de observación 14 ---- P1903: ¿Qué tan preocupado/a se sintió ... el día de ayer?
+
+# Se separan las columnas que se van a utilizar para cada etnia
+indigenas_preocupacion = df_bogota_indigenas[['P1903', 'FEX_C']]
+negros_preocupacion = df_bogota_negros[['P1903', 'FEX_C']]
+sin_etnia_preocupacion = df_bogota_sin_etnia[['P1903', 'FEX_C']]
+
+# Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
+datos_indigenas_preocupacion = preparar_datos(indigenas_preocupacion, 'P1903')
+datos_negros_preocupacion = preparar_datos(negros_preocupacion, 'P1903')
+datos_sin_etnia_preocupacion = preparar_datos(sin_etnia_preocupacion, 'P1903')
+
+# Se crea una figura con 3 gráficos de barras con EJES Y INDEPENDIENTES (sharey=False)
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 5), sharey=False)
+
+# Se asigna el título
+fig.suptitle(
+    'Frecuencia de Preocupación del día anterior (P1903) por Grupo Étnico\n(Población expandida'
+    ' con FEX_C - Escalas independientes)',
+    fontsize=15,
+    weight='bold',
+    y=1.02,
+)
+
+# Datos, títulos y colores para cada gráfico
+grupos = [
+    (datos_indigenas_preocupacion, '1. Indígena', '#2b5c8f'),
+    (datos_negros_preocupacion, '5. Negro/a, mulato/a, afrodescendiente, afrocolombiano/a', '#d95f02'),
+    (datos_sin_etnia_preocupacion, '6. Ningún grupo étnico', '#7570b3'),
+]
+
+for i, (serie_datos, titulo, color) in enumerate(grupos):
+  ax = axes[i]
+
+  # Graficar barras
+  serie_datos.plot(
+      kind='bar', ax=ax, color=color, width=0.75, edgecolor='black'
+  )
+
+  # Personalización de cada gráfico
+  ax.set_title(titulo, fontsize=12, weight='bold')
+  ax.set_xlabel(
+      'Preocupación del día anterior (P1903)\n(0 = Para nada preocupado/a, 10 = Todo el tiempo preocupado/a)',
+      fontsize=10,
+  )
+
+  # Como cada gráfico tiene su propia escala, se muestra el eje Y en cada uno
+  ax.set_ylabel(
+      'Población Representada (Frecuencia ponderada FEX_C)', fontsize=10
+  )
+
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+  ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+plt.tight_layout()
 plt.show()

@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # 1. Cargar los datos
 df = pd.read_csv("Características y composición del hogar.csv", sep=";")
@@ -54,9 +55,6 @@ print(df_bogota_indigenas[["FEX_C"]].to_string(index=False))
 print("\nFactor de expansión - Afro")
 print(df_bogota_negros[["FEX_C"]].to_string(index=False))
 
-print("\nFactor de expansión - Sin etnia")
-print(df_bogota_sin_etnia[["FEX_C"]].to_string(index=False))
-
 sns.set(style="whitegrid")
 
 # Diccionario de grupos y colores
@@ -74,8 +72,7 @@ df_combinado = pd.concat(
     [df.assign(grupo_etnico=nombre) for nombre, (df, color) in grupos.items()],
     ignore_index=True
 )
-
-
+df_combinado.loc[df_combinado["P1896"] > 10, "P1896"] = np.nan
 ### graficos de cajas y bigotes para todas las variables de bienestar
 
 
@@ -364,3 +361,19 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
 
 plt.tight_layout()
 plt.show()
+
+
+# Revisar si hay valores mayores a 10 en cada columna
+variables_bienestar = [
+    "P1895", "P1896", "P1897", "P1898", "P1899",
+    "P3175", "P1901", "P1903", "P1904", "P1905", "P1927"
+]
+
+
+for var in variables_bienestar:
+    valores_invalidos = df_combinado[df_combinado[var] > 10]
+    if not valores_invalidos.empty:
+        print(f"En la variable {var} hay valores mayores a 10:")
+        print(valores_invalidos[[var, "grupo_etnico"]])
+    else:
+        print(f"En la variable {var} no hay valores mayores a 10.")

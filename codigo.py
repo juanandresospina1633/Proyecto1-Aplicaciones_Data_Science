@@ -241,6 +241,8 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+#plt.savefig('Satisfación con el tiempo libre.png', bbox_inches='tight')
 plt.show()
 
 ## Grafico de observación 13 ---- P1901: ¿Qué tan feliz se sintió ... el día de ayer?
@@ -298,6 +300,8 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+#plt.savefig('Nivel de Felicidad.png', bbox_inches='tight')
 plt.show()
 
 ## Grafico de observación 14 ---- P1903: ¿Qué tan preocupado/a se sintió ... el día de ayer?
@@ -355,4 +359,6 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+#plt.savefig('Preocupación del día anterior.png', bbox_inches='tight')
 plt.show()

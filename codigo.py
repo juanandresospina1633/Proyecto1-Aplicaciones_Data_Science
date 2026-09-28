@@ -31,19 +31,19 @@ df_bogota["FEX_C"] = df_bogota["FEX_C"].astype(str).str.replace(",", ".").astype
 print("bienestar por etnia")
 
 df_bogota_indigenas = df_bogota.loc[df_bogota["P6080"] == 1, ["FEX_C","P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
-df_bogota_negros = df_bogota.loc[df_bogota["P6080"] == 5, ["FEX_C","P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
+df_bogota_afros = df_bogota.loc[df_bogota["P6080"] == 5, ["FEX_C","P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
 df_bogota_sin_etnia = df_bogota.loc[df_bogota["P6080"] == 6, ["FEX_C","P1895","P1896","P1897","P1898","P1899","P3175","P1901","P1903","P1904","P1905","P1927"]]
 
 
 n_indigenas_bogota = len(df_bogota_indigenas)
-n_afro_bogota = len(df_bogota_negros)
+n_afro_bogota = len(df_bogota_afros)
 n_sin_etnia_bogota = len(df_bogota_sin_etnia)
 print(f"Personas indígenas en la muestra de Bogotá: {n_indigenas_bogota}")
 print(f"Personas afro en la muestra de Bogotá: {n_afro_bogota}")
 
 ## Reconocer que cantidad de población representan los individuos encuestados
 poblacion_indigena = df_bogota_indigenas["FEX_C"].sum()
-poblacion_afro = df_bogota_negros["FEX_C"].sum()
+poblacion_afro = df_bogota_afros["FEX_C"].sum()
 poblacion_sin_etnia = df_bogota_sin_etnia["FEX_C"].sum()
 print(f"Población indígena estimada en Bogotá segun el Factor de expansión: {poblacion_indigena:,.0f}")
 print(f"Población afro estimada en Bogotá según el Factor de expansión: {poblacion_afro:,.0f}")
@@ -53,14 +53,14 @@ print("Factor de expansión - Indígenas")
 print(df_bogota_indigenas[["FEX_C"]].to_string(index=False))
 
 print("\nFactor de expansión - Afro")
-print(df_bogota_negros[["FEX_C"]].to_string(index=False))
+print(df_bogota_afros[["FEX_C"]].to_string(index=False))
 
 sns.set(style="whitegrid")
 
 # Diccionario de grupos y colores
 grupos = {
     "Indígena": (df_bogota_indigenas, "red"),
-    "Afro": (df_bogota_negros, "blue"),
+    "Afro": (df_bogota_afros, "blue"),
     "Sin etnia": (df_bogota_sin_etnia, "green")
 }
 
@@ -195,7 +195,7 @@ def preparar_datos(df_subset, variable_analizada):
 
 # Se separan las columnas que se van a utilizar para cada etnia
 indigenas_tiempolibre = df_bogota_indigenas[['P3175', 'FEX_C']]
-negros_tiempolibre = df_bogota_negros[['P3175', 'FEX_C']]
+negros_tiempolibre = df_bogota_afros[['P3175', 'FEX_C']]
 sin_etnia_tiempolibre = df_bogota_sin_etnia[['P3175', 'FEX_C']]
 
 # Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
@@ -246,13 +246,15 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+plt.savefig('Satisfación con el tiempo libre.png', bbox_inches='tight')
 plt.show()
 
 ## Grafico de observación 13 ---- P1901: ¿Qué tan feliz se sintió ... el día de ayer?
 
 # Se separan las columnas que se van a utilizar para cada etnia
 indigenas_feliz = df_bogota_indigenas[['P1901', 'FEX_C']]
-negros_feliz = df_bogota_negros[['P1901', 'FEX_C']]
+negros_feliz = df_bogota_afros[['P1901', 'FEX_C']]
 sin_etnia_feliz = df_bogota_sin_etnia[['P1901', 'FEX_C']]
 
 # Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
@@ -303,13 +305,15 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+#plt.savefig('Nivel de Felicidad.png', bbox_inches='tight')
 plt.show()
 
 ## Grafico de observación 14 ---- P1903: ¿Qué tan preocupado/a se sintió ... el día de ayer?
 
 # Se separan las columnas que se van a utilizar para cada etnia
 indigenas_preocupacion = df_bogota_indigenas[['P1903', 'FEX_C']]
-negros_preocupacion = df_bogota_negros[['P1903', 'FEX_C']]
+negros_preocupacion = df_bogota_afros[['P1903', 'FEX_C']]
 sin_etnia_preocupacion = df_bogota_sin_etnia[['P1903', 'FEX_C']]
 
 # Se obtienen las frecuencias para cada grupo teniendo en cuenta el factor de expansión
@@ -360,6 +364,8 @@ for i, (serie_datos, titulo, color) in enumerate(grupos):
   ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
+#El siguiente código se usó para guardar la figura
+#plt.savefig('Preocupación del día anterior.png', bbox_inches='tight')
 plt.show()
 
 
